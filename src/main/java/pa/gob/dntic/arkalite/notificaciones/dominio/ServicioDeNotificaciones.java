@@ -1,8 +1,9 @@
 package pa.gob.dntic.arkalite.notificaciones.dominio;
 
+import pa.gob.dntic.arkalite.eventos.SolicitudEnviada;
 import java.util.List;
-import java.util.Optional;
 
+/* Dominio de Notificaciones. Reacciona al EVENTO, no al servicio de solicitudes. */
 public class ServicioDeNotificaciones {
     private final RepositorioDeNotificaciones repositorio;
 
@@ -10,24 +11,11 @@ public class ServicioDeNotificaciones {
         this.repositorio = repositorio;
     }
 
-    public Notificacion guardar(String texto) {
-        if (texto == null || texto.isBlank()) {
-            throw new IllegalArgumentException("El texto es obligatorio");
-        }
-
-        Notificacion nueva = new Notificacion(texto);
-        repositorio.guardar(nueva);
-        return nueva;
-    }
-
-    public Optional<Notificacion> buscar(String texto) {
-        if (texto == null || texto.isBlank()) {
-            throw new IllegalArgumentException("El texto es obligatorio");
-        }
-        return repositorio.buscar(texto);
+    public void alRecibirSolicitudEnviada(SolicitudEnviada e) {
+        repositorio.guardar(new Notificacion("Solicitud " + e.id() + " (" + e.tipo() + ") enviada"));
     }
 
     public List<Notificacion> listar() {
-        return repositorio.listar();
+        return repositorio.todas();
     }
 }

@@ -1,7 +1,5 @@
 package pa.gob.dntic.arkalite.solicitudes.dominio;
 
 public class SolicitudNoEncontrada extends RuntimeException {
-    public SolicitudNoEncontrada(int id) {
-        super("No existe la solicitud: " + id);
-    }
+    public SolicitudNoEncontrada(String id) { super("No existe la solicitud " + id); }
 }
