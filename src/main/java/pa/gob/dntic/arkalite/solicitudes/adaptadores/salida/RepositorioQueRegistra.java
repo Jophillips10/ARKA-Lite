@@ -4,43 +4,28 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import pa.gob.dntic.arkalite.solicitudes.dominio.RepositorioDeSolicitudes;
 import pa.gob.dntic.arkalite.solicitudes.dominio.Solicitud;
-
 import java.util.*;
 
+/*
+ * SEGUNDO adaptador del MISMO puerto: hace lo mismo que RepositorioEnMemoria
+ * pero registra cada escritura. El dominio no cambia ni una línea: ese es el pago.
+ */
 @Repository
-@Primary // Indica que esta implementación debe ser la principal cuando se inyecte RepositorioDeSolicitudes
+@Primary
 public class RepositorioQueRegistra implements RepositorioDeSolicitudes {
 
     private final Map<String, Solicitud> almacen = new LinkedHashMap<>();
 
-    public  void guardar(Solicitud s) {
-        System.out.println("[repo] Guardando solicitud: " + s.id() + " - " + s.estado());
+    public void guardar(Solicitud s) {
+        System.out.println("[repo] guardando " + s.id() + " (" + s.estado() + ")");
         almacen.put(s.id(), s);
     }
 
-    public Optional <Solicitud> buscar(String id) {
+    public Optional<Solicitud> buscar(String id) {
         return Optional.ofNullable(almacen.get(id));
     }
 
-    public List<Solicitud> listar() {
+    public List<Solicitud> todas() {
         return new ArrayList<>(almacen.values());
     }
-
-public void rechazar(String id) {
-        Solicitud solicitud = almacen.get(id);
-        if (solicitud != null) {
-            solicitud.rechazar();
-            System.out.println("[repo] Solicitud rechazada: " + id);
-        }
-    }
-
-    public void aprobar(String id) {
-        Solicitud solicitud = almacen.get(id);
-        if (solicitud != null) {
-            solicitud.aprobar();
-            System.out.println("[repo] Solicitud aprobada: " + id);
-        }
-    }
-
-
 }

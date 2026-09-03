@@ -1,54 +1,42 @@
 package pa.gob.dntic.arkalite.solicitudes.adaptadores.entrada;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pa.gob.dntic.arkalite.solicitudes.dominio.Estado;
 import pa.gob.dntic.arkalite.solicitudes.dominio.ServicioDeSolicitudes;
 import pa.gob.dntic.arkalite.solicitudes.dominio.Solicitud;
-
 import java.util.List;
-import java.util.Optional;
 
+/*
+ * ADAPTADOR de entrada: traduce la web hacia el dominio. Es DELGADO:
+ * no tiene lógica ni almacenamiento; solo llama al servicio.
+ */
 @RestController
-@RequestMapping("/solicitudes")
 public class SolicitudController {
 
-   private final ServicioDeSolicitudes servicio;
+    private final ServicioDeSolicitudes servicio;
 
-   public SolicitudController(ServicioDeSolicitudes servicio) {
-       this.servicio = servicio;
-   }
+    public SolicitudController(ServicioDeSolicitudes servicio) {
+        this.servicio = servicio;
+    }
 
-   @PostMapping
-   public Solicitud guardar(@RequestBody CrearSolicitudRequest request) {
-       return servicio.registrar(request.id(), request.tipo());
-   }
+    @GetMapping("/solicitudes")
+    public List<Solicitud> todas() {
+        return servicio.listar();
+    }
 
-   @GetMapping
-   public List<Solicitud> todas() {
-       return servicio.listar();
-   }
-
-   @GetMapping("/{id}")
-   public Optional<Solicitud> porId(@PathVariable String id) {
+    @GetMapping("/solicitudes/{id}")
+    public Solicitud porId(@PathVariable String id) {
         return servicio.buscar(id);
     }
 
-   @PostMapping("/{id}/enviar")
-   public Solicitud enviar(@PathVariable String id) {
-       return servicio.enviar(id);
-   }
+    @PostMapping("solicitudes/crear")
+    public Solicitud crearNueva() {
+        Solicitud nueva = new Solicitud ("INC-002", "Incidencia", Estado.BORRADOR);
+        return servicio.registrar(nueva.id(), nueva.tipo());
+    }
 
-   @PostMapping("/{id}/aprobar")
-   public Solicitud aprobar(@PathVariable String id) {
-       return servicio.aprobar(id);
-   }
-
-   @PostMapping("/{id}/rechazar")
-   public Solicitud rechazar(@PathVariable String id) {
-       return servicio.rechazar(id);
-   }
+    @PostMapping("/solicitudes/{id}/enviar")
+    public Solicitud enviar(@PathVariable String id) {
+        return servicio.enviar(id);
+    }
 }
