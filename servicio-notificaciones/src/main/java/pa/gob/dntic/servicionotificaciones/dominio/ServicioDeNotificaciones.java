@@ -1,4 +1,4 @@
-package pa.gob.dntic.arkalite.notificaciones.dominio;
+package pa.gob.dntic.servicionotificaciones.dominio;
 
 import pa.gob.dntic.arkalite.eventos.SolicitudEnviada;
 import java.util.List;

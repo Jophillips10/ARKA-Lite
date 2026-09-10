@@ -1,4 +1,5 @@
-package pa.gob.dntic.arkalite.notificaciones.dominio;
+package pa.gob.dntic.servicionotificaciones.dominio;
+
 import java.util.List;
 public interface RepositorioDeNotificaciones {
     void guardar(Notificacion n);

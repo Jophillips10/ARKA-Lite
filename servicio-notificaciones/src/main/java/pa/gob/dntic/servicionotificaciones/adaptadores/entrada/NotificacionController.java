@@ -1,9 +1,9 @@
-package pa.gob.dntic.arkalite.notificaciones.adaptadores.entrada;
+package pa.gob.dntic.servicionotificaciones.adaptadores.entrada;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pa.gob.dntic.arkalite.notificaciones.dominio.Notificacion;
-import pa.gob.dntic.arkalite.notificaciones.dominio.ServicioDeNotificaciones;
+import pa.gob.dntic.servicionotificaciones.dominio.Notificacion;
+import pa.gob.dntic.servicionotificaciones.dominio.ServicioDeNotificaciones;
 import java.util.List;
 
 /* Para VER que el evento llegó: GET /notificaciones */

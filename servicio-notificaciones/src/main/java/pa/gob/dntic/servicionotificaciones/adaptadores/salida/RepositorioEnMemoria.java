@@ -1,8 +1,8 @@
-package pa.gob.dntic.arkalite.notificaciones.adaptadores.salida;
+package pa.gob.dntic.servicionotificaciones.adaptadores.salida;
 
 import org.springframework.stereotype.Repository;
-import pa.gob.dntic.arkalite.notificaciones.dominio.Notificacion;
-import pa.gob.dntic.arkalite.notificaciones.dominio.RepositorioDeNotificaciones;
+import pa.gob.dntic.servicionotificaciones.dominio.Notificacion;
+import pa.gob.dntic.servicionotificaciones.dominio.RepositorioDeNotificaciones;
 import java.util.*;
 
 @Repository("repositorioDeNotificacionesEnMemoria")

@@ -1,4 +1,4 @@
-package pa.gob.dntic.arkalite.notificaciones.dominio;
+package pa.gob.dntic.servicionotificaciones.dominio;
 
 public class NotificacionNoEncontrada extends RuntimeException {
     public NotificacionNoEncontrada(int id) {
