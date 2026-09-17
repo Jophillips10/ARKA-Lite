@@ -36,6 +36,7 @@ jobs:
       - name: Construir y publicar ${{ matrix.servicio }}
         working-directory: ${{ matrix.servicio }}
         run: |
-          IMG=ghcr.io/arka-lite/${{ matrix.servicio }}:${{ github.sha }} # construye la imagen de Docker con la etiqueta del commit actual
+          REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]') # construye el nombre del repositorio de Docker de GitHub
+          IMG=ghcr.io/$REPO_LC/${{ matrix.servicio }}:${{ github.sha }} # construye la imagen de Docker con la etiqueta del commit actual
           docker build -t "${IMG}" .
           docker push ${IMG} # sube la imagen al registro de Docker de GitHub
