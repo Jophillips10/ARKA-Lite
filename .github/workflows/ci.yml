@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  construir-y-probar:
+    runs-on: ubuntu-latest
+    permissions: {contents: read, packages: write} # permisos para poder subir la imagen al registro de Docker de GitHub
+    strategy:
+      matrix:
+        servicio: [servicio-solicitudes, servicio-notificaciones] # construye y prueba cada servicio de forma independiente
+    steps:
+      - name: Traer el codigo del repositorio
+        uses: actions/checkout@v4 # trae el código del repositorio para que se pueda compilar y probar
+
+      - name: Preparar Java 26
+        uses: actions/setup-java@v4 # prepara el entorno de Java 26 y cachea dependencias de Maven
+        with:
+          distribution: 'temurin'
+          java-version: '26'
+          cache: 'maven' # cachea dependencias y compila el proyecto, ejecutando pruebas unitarias y de integración
+
+      - name: Compilar y PROBAR
+        run: mvn -B verify #si un test falla, el job falla y no se construye la imagen de Docker
+        working-directory: ${{ matrix.servicio }} # ejecuta el comando en el directorio del servicio correspondiente
+
+      - name: Login al registro de Docker
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }} # inicia sesión en el registro de Docker de GitHub para poder subir la imagen
+
+      - name: Construir y publicar ${{ matrix.servicio }}
+        working-directory: ${{ matrix.servicio }}
+        run: |
+          REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]') # construye el nombre del repositorio de Docker de GitHub
+          IMG=ghcr.io/$REPO_LC/${{ matrix.servicio }}:${{ github.sha }} # construye la imagen de Docker con la etiqueta del commit actual
+          docker build -t "${IMG}" .
+          docker push ${IMG} # sube la imagen al registro de Docker de GitHub
