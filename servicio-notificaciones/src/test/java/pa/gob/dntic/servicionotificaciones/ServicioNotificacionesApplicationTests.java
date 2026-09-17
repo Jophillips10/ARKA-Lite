@@ -10,4 +10,9 @@ class ServicioNotificacionesApplicationTests {
     void contextLoads() {
     }
 
+    @Test
+    void sumama_dos_numeros() {
+        assertEquals(5, 3+3);
+    }
+
 }
