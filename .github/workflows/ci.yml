@@ -9,8 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions: {contents: read, packages: write} # permisos para poder subir la imagen al registro de Docker de GitHub
     strategy:
-     matrix:
-       servicio: [servicio-solicitudes, servicio-notificaciones] # construye y prueba cada servicio de forma independiente
+      matrix:
+        servicio: [servicio-solicitudes, servicio-notificaciones] # construye y prueba cada servicio de forma independiente
     steps:
       - name: Traer el codigo del repositorio
         uses: actions/checkout@v4 # trae el código del repositorio para que se pueda compilar y probar
@@ -24,6 +24,7 @@ jobs:
 
       - name: Compilar y PROBAR
         run: mvn -B verify #si un test falla, el job falla y no se construye la imagen de Docker
+        working-directory: ${{ matrix.servicio }} # ejecuta el comando en el directorio del servicio correspondiente
 
       - name: Login al registro de Docker
         uses: docker/login-action@v4
