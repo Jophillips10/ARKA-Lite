@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notificaciones
+spec:
+  replicas: 1 #cantidad de pods que se van a crear
+  selector:
+    matchLabels:
+      app: notificaciones #el deployment cuida a los pods con esta etiqueta
+  template: #plantilla de los pods que se van a crear
+    metadata:
+      labels:
+        app: notificaciones #enruta a los pods con esta etiqueta (debe calzar con el selector del service)
+    spec:
+      containers:
+        - name: arka-lite-servicio-notificador-1
+          image: notificaciones:local #traefik/whoami #imagen de Docker que se construye en el workflow de CI
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: notificaciones
+spec:
+  type: NodePort
+  selector:
+    app: notificaciones #enruta a los pods con esta etiqueta (debe calzar con el deployment)
+  ports:
+    - port: 8080
+      targetPort: 8080

@@ -11,7 +11,7 @@ import pa.gob.dntic.serviciosolicitudes.solicitudes.dominio.PublicadorDeEventos;
     private final RestClient rest = RestClient.create();
     private final String url;
 
-    public PublicadorRest(@Value("${NOTIFICATION_URL:http://localhost:8081/notificaciones}") String url) {
+    public PublicadorRest(@Value("${NOTIFICATION_URL}") String url) {
         this.url = url;
     }
 
