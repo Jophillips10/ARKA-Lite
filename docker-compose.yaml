@@ -1,4 +1,17 @@
 services:
+  base-datos:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: arka
+      POSTGRES_PASSWORD: arka
+      POSTGRES_DB: arka
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U arka -d arka -h localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
   servicio-notificaciones:
     build: ./servicio-notificaciones
     ports:
@@ -9,6 +22,11 @@ services:
     ports:
       - "8080:8080"
     environment:
+      #la base se alcanza por nombre de servicio (base-datos), vía config - el patron de s15
+      DB_URL: jdbc:postgresql://base-datos:5432/arka
+      DB_USER: arka
+      DB_PASSWORD: arka
       NOTIFICACIONES_URL: http://servicio-notificaciones:8080/eventos/solicitud-enviada
     depends_on:
-      - servicio-notificaciones
+      base-datos:
+        condition: service_healthy #no se inicia hasta que la base de datos esté lista

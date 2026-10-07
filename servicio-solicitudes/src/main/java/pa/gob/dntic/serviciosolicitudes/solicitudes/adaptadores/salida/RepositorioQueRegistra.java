@@ -8,7 +8,6 @@ import pa.gob.dntic.serviciosolicitudes.solicitudes.dominio.Solicitud;
 import java.util.*;
 
 @Repository
-@Primary
 public class RepositorioQueRegistra implements RepositorioDeSolicitudes {
 
     private final Map<String, Solicitud> almacen = new LinkedHashMap<>();
