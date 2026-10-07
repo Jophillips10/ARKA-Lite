@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: servicio-notificaciones
-          image: servicio-notificaciones:jorge
+          image: servicio-notificaciones:local
           imagePullPolicy: IfNotPresent
           ports: [{ containerPort: 8080 }]
           readinessProbe:
