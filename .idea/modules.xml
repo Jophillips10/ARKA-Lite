@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/ARKA-Lite.iml" filepath="$PROJECT_DIR$/.idea/ARKA-Lite.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/ProyectoJava.iml" filepath="$PROJECT_DIR$/.idea/ProyectoJava.iml" />
+      <module fileurl="file://$PROJECT_DIR$/arkalite.iml" filepath="$PROJECT_DIR$/arkalite.iml" />
     </modules>
   </component>
 </project>
