@@ -6,12 +6,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="arkalite" />
         <module name="servicio-solicitudes" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="ARKA-Lite" target="26" />
+      <module name="arkalite" target="26" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
