@@ -11,7 +11,8 @@ COPY pom.xml .
 
 RUN mvn -q dependency:go-offline
 COPY src ./src
-RUN mvn -q clean package -DskipTests
+#RUN mvn -q clean package -DskipTests
+RUN mvn -q clean package -Dmaven.test.skip=true
 
 FROM eclipse-temurin:26-jre
 

@@ -8,6 +8,20 @@ jobs:
   construir-y-probar:
     runs-on: ubuntu-latest
     permissions: {contents: read, packages: write} # permisos para poder subir la imagen al registro de Docker de GitHub
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: arka
+          POSTGRES_PASSWORD: arka
+          POSTGRES_DB: arka
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U arka -d arka"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     strategy:
       matrix:
         servicio: [servicio-solicitudes, servicio-notificaciones] # construye y prueba cada servicio de forma independiente
