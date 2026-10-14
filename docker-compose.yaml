@@ -22,7 +22,7 @@ services:
        base-datos:
         condition: service_healthy #no se inicia hasta que la base de datos esté lista
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://base-datos:5432/notificaciones
+      SPRING_DATASOURCE_URL: jdbc:postgresql://base-datos:5432/arka
       SPRING_DATASOURCE_USERNAME: arka
       SPRING_DATASOURCE_PASSWORD: arka
 

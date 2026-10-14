@@ -2,6 +2,10 @@ package pa.gob.dntic.serviciosolicitudes.solicitudes.dominio;
 
 public record Solicitud(String id, String tipo, Estado estado) {
 
+    public String eventoId() {
+        return id;
+    }
+
     public Solicitud enviar() {
         if (estado != Estado.BORRADOR) {
             throw new IllegalStateException("solo se puede enviar una solicitud en BORRADOR");

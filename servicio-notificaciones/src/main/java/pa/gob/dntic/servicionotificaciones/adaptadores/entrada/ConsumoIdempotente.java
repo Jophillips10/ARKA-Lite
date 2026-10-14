@@ -2,10 +2,10 @@ package pa.gob.dntic.servicionotificaciones.adaptadores.entrada;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import pa.gob.dntic.servicionotificaciones.eventos.SolicitudEnviada;
-import pa.gob.dntic.servicionotificaciones.persistencia.EventoProcesadoEntity;
-import pa.gob.dntic.servicionotificaciones.persistencia.EventoProcesadoRepository;
+import pa.gob.dntic.servicionotificaciones.adaptadores.persistencia.EventoProcesadoEntity;
+import pa.gob.dntic.servicionotificaciones.adaptadores.persistencia.EventoProcesadoRepository;
 import pa.gob.dntic.servicionotificaciones.dominio.ServicioDeNotificaciones;
+import pa.gob.dntic.servicionotificaciones.eventos.SolicitudEnviada;
 
 /*
 *CONSUMO IDEMPOTENTE: Junta las dos ideas del módulo:
@@ -27,11 +27,11 @@ public class ConsumoIdempotente {
 
     @Transactional
     public void alRecibir(SolicitudEnviada e) {
-        if (procesados.existsById(e.eventoId())) {
+        if (procesados.existsById(e.id())) {
             return; // Ya procesado, no hacer nada
         }
 
         servicio.alRecibirSolicitudEnviada(e);
-        procesados.save(new EventoProcesadoEntity(e.eventoId()));
+        procesados.save(new EventoProcesadoEntity(e.id()));
     }
 }
