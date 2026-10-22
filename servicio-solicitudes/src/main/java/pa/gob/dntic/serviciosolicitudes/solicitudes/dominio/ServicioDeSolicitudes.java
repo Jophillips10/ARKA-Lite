@@ -23,7 +23,7 @@ public class ServicioDeSolicitudes {
     public Solicitud enviar(String id) {
         Solicitud enviada = buscar(id).enviar();
         repositorio.guardar(enviada);
-        publicador.publicar(new SolicitudEnviada(enviada.id(), enviada.tipo()));  // avisa; no sabe quién reacciona
+        publicador.publicar(new SolicitudEnviada(enviada.eventoId(),enviada.id(), enviada.tipo()));  // avisa; no sabe quién reacciona
         return enviada;
     }
 

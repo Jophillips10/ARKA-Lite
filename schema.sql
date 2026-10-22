@@ -20,3 +20,4 @@ CREATE TABLE evento (
 
 -- Se consultan los eventos DE una solicitud -> índice sobre la clave foránea.
 CREATE INDEX idx_evento_solicitud ON evento (solicitud_id);
+
