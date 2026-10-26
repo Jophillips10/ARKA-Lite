@@ -22,7 +22,7 @@ public class PublicadorConReintento {
     public void publicar(String solicitudId, String  tipo ) {
         SolicitudEnviada evento = new SolicitudEnviada(UUID.randomUUID().toString(), solicitudId, tipo);
 
-        log.info("publica evento en {} de solicitud {}: {}", evento.eventoId(), solicitudId);
+        log.info("publica evento en {} de solicitud {}: {}", evento.eventoId(), solicitudId, tipo);
         for (int intento = 1; intento <= 3; intento++) {
             try {
                 rest.post().uri(url).body(evento).retrieve().toBodilessEntity();
