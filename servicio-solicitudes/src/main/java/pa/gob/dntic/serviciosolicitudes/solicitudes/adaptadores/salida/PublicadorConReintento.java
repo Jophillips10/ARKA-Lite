@@ -1,43 +1,55 @@
 package pa.gob.dntic.serviciosolicitudes.solicitudes.adaptadores.salida;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestClient;
 import pa.gob.dntic.serviciosolicitudes.eventos.SolicitudEnviada;
-import pa.gob.dntic.serviciosolicitudes.solicitudes.dominio.Solicitud;
-import java.util.UUID;
 
+import java.util.UUID;
 
 public class PublicadorConReintento {
 
-    private final RestClient rest = RestClient.create();
+    private static final Logger log = LoggerFactory.getLogger(PublicadorConReintento.class);
+
+    private final RestClient rest;
     private final String url;
 
-    public PublicadorConReintento(String url) {
+    public PublicadorConReintento(RestClient restInstrumentado, String url) {
+        this.rest = restInstrumentado;
         this.url = url;
     }
 
-    public void publicar(String solicitudId, String tipo) {
-        // eleventoId se genera UNA vez: si se reintenta, es el MISMO id -> el consumidor deduplica
-
+    public void publicar(String solicitudId, String  tipo ) {
         SolicitudEnviada evento = new SolicitudEnviada(UUID.randomUUID().toString(), solicitudId, tipo);
+
+        log.info("publica evento en {} de solicitud {}: {}", evento.eventoId(), solicitudId, tipo);
         for (int intento = 1; intento <= 3; intento++) {
             try {
                 rest.post().uri(url).body(evento).retrieve().toBodilessEntity();
-                return;
+                return; // Salir si la publicación fue exitosa
             } catch (RuntimeException ex) {
-              if (intento == 3) {guardarParaReintento(evento);  return;}  // si falla 3 veces, lo guardo para reintento manual  }
-            dormir(500L * intento);  // espera 1s, 2s, 3s antes de reintentar
+                if (intento == 3) {
+                    log.error("no entregado tras {} intentos; va a outbox: {}", intento, evento.eventoId(), ex);
+                    guardarParaReintento(evento);
+                    return;
+                }
+                log.warn("intento {} falló para {}; reintentando", intento, evento.eventoId());
+                dormir(500L * intento);
             }
         }
     }
 
 
     private void guardarParaReintento(SolicitudEnviada e) {
-        // en la vida real, a una tabla "outbox" que un job reenvia luego (mismo eventoId).
-         System.err.println("no entregado tras 3 intentos; guardado para reintento: " + e.eventoId());
+        // Aquí se implementaría la lógica para guardar el evento en un outbox o base de datos
     }
 
     private void dormir(long ms) {
-        try { Thread.sleep(ms); } catch (InterruptedException ie) { Thread.currentThread().interrupt(); }
+        try {
+            Thread.sleep(ms);
+        } catch (InterruptedException ie) {
+            Thread.currentThread().interrupt();
+        }
     }
 
 }
